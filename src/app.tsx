@@ -32,6 +32,7 @@ const NewYearCountdown = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
+      ///@ts-ignore
       const time = new Date(...timeTillDate).getTime() - Date.now()
 
       const days = Math.floor(time / (1000 * 60 * 60 * 24))
@@ -53,14 +54,13 @@ const NewYearCountdown = () => {
       }
     }, 1000)
   }, [])
-
   return (
     <p className="wrapper">
       {Object.keys(state).map((v) => (
         <p class="base-timer">
-          <SvgCircle max={max[v]} now={state[v]} />
+          <SvgCircle max={(max as any)[v]} now={(state as any)[v]} />
           <span id="base-timer-label" class="base-timer__label">
-            <div>{state[v]}</div>
+            <div>{(state as any)[v]}</div>
           </span>
         </p>
       ))}
