@@ -22,7 +22,7 @@ const NewYearCountdown = () => {
     minutes: 0,
     seconds: 0,
   })
-  const [timeTillDate, setTimeTillDate] = useState([2022, 0, 21, 0, 0, 0, 0])
+  const [timeTillDate, setTimeTillDate] = useState([2022, 0, 22, 0, 0, 0, 0])
   const max: CountdownDateData = {
     days: 31,
     hours: 24,
