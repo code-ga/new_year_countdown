@@ -67,7 +67,6 @@ const NewYearCountdown = () => {
                 <SvgCircle
                   max={(max as any)[v]}
                   now={(state as any)[v]}
-                  label={v}
                 />
                 <span id="base-timer-label" class="base-timer__label">
                   <div>{(state as any)[v]}</div>
@@ -84,11 +83,9 @@ const NewYearCountdown = () => {
 const SvgCircle = ({
   max,
   now,
-  label,
 }: {
   max: number;
   now: number;
-  label: string;
 }) => {
   // Divides time left by the defined time limit.
   function calculateTimeFraction() {
