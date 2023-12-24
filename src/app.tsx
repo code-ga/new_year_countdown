@@ -1,19 +1,19 @@
-import { useEffect, useState } from 'preact/hooks'
-import './app.css'
+import { useEffect, useState } from "preact/hooks";
+import "./app.css";
 
 export function App() {
   return (
     <>
       <NewYearCountdown />
     </>
-  )
+  );
 }
 
 interface CountdownDateData {
-  days: number
-  hours: number
-  minutes: number
-  seconds: number
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
 }
 const NewYearCountdown = () => {
   const [state, setState] = useState<CountdownDateData>({
@@ -21,61 +21,82 @@ const NewYearCountdown = () => {
     hours: 0,
     minutes: 0,
     seconds: 0,
-  })
-  const [timeTillDate, setTimeTillDate] = useState([2022, 0, 22, 0, 0, 0, 0])
+  });
+  // [year, month, day, hour, minute, second, millisecond]
+  const [timeTillDate, setTimeTillDate] = useState([2024, 0, 0, 0, 0, 0, 0]);
   const max: CountdownDateData = {
     days: 31,
     hours: 24,
     minutes: 60,
     seconds: 60,
-  }
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
       ///@ts-ignore
-      const time = new Date(...timeTillDate).getTime() - Date.now()
+      const time = new Date(...timeTillDate).getTime() - Date.now();
 
-      const days = Math.floor(time / (1000 * 60 * 60 * 24))
-      const hours = Math.floor((time / (1000 * 60 * 60)) % 24)
-      const minutes = Math.floor((time / 1000 / 60) % 60)
-      const seconds = Math.floor((time / 1000) % 60)
+      const days = Math.floor(time / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((time / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((time / 1000 / 60) % 60);
+      const seconds = Math.floor((time / 1000) % 60);
       if (seconds < 0) {
         setTimeTillDate((pre) => {
-          pre[0] = pre[0] + 1
-          return pre
-        })
+          pre[0] = pre[0] + 1;
+          return pre;
+        });
       }
 
-      setState({ days, hours, minutes, seconds })
+      setState({ days, hours, minutes, seconds });
       return () => {
         if (interval) {
-          clearInterval(interval)
+          clearInterval(interval);
         }
-      }
-    }, 1000)
-  }, [])
+      };
+    }, 1000);
+  }, []);
   return (
-    <p className="wrapper">
-      {Object.keys(state).map((v) => (
-        <p class="base-timer">
-          <SvgCircle max={(max as any)[v]} now={(state as any)[v]} />
-          <span id="base-timer-label" class="base-timer__label">
-            <div>{(state as any)[v]}</div>
-          </span>
+    <div className="main">
+      <p className="wrapper">
+        <p className="title">New Year Countdown</p>
+        <p className="wrapper__timer">
+          {Object.keys(state).map((v) => (
+            <div>
+              <p className="timer__label">{v}:</p>
+              <p class="base-timer">
+                <SvgCircle
+                  max={(max as any)[v]}
+                  now={(state as any)[v]}
+                  label={v}
+                />
+                <span id="base-timer-label" class="base-timer__label">
+                  <div>{(state as any)[v]}</div>
+                </span>
+              </p>
+            </div>
+          ))}
         </p>
-      ))}
-    </p>
-  )
-}
+      </p>
+    </div>
+  );
+};
 
-const SvgCircle = ({ max, now }: { max: number; now: number }) => {
+const SvgCircle = ({
+  max,
+  now,
+  label,
+}: {
+  max: number;
+  now: number;
+  label: string;
+}) => {
   // Divides time left by the defined time limit.
   function calculateTimeFraction() {
-    return now / max
+    return now / max;
   }
   const circleDasharray = `${
     283 - Number((calculateTimeFraction() * 283).toFixed(0))
-  } 283`
+  } 283`;
 
   return (
     <span>
@@ -105,5 +126,5 @@ const SvgCircle = ({ max, now }: { max: number; now: number }) => {
         </g>
       </svg>
     </span>
-  )
-}
+  );
+};
