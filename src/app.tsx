@@ -1,4 +1,4 @@
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import "./app.css";
 
 export function App() {
@@ -23,7 +23,7 @@ const NewYearCountdown = () => {
     seconds: 0,
   });
   // [year, month, day, hour, minute, second, millisecond]
-  const [timeTillDate, setTimeTillDate] = useState([2024, 0, 0, 0, 0, 0, 0]);
+  const timeTillDate = useRef([2024, 0, 0, 0, 0, 0, 0]);
   const max: CountdownDateData = {
     days: 31,
     hours: 24,
@@ -34,17 +34,18 @@ const NewYearCountdown = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       ///@ts-ignore
-      const time = new Date(...timeTillDate).getTime() - Date.now();
+      const time = new Date(...timeTillDate.current).getTime() - Date.now();
 
       const days = Math.floor(time / (1000 * 60 * 60 * 24));
       const hours = Math.floor((time / (1000 * 60 * 60)) % 24);
       const minutes = Math.floor((time / 1000 / 60) % 60);
       const seconds = Math.floor((time / 1000) % 60);
       if (seconds < 0) {
-        setTimeTillDate((pre) => {
-          pre[0] = pre[0] + 1;
-          return pre;
-        });
+        // setTimeTillDate((pre) => {
+        //   pre[0] = pre[0] + 1;
+        //   return pre;
+        // });
+        timeTillDate.current[0] += 1;
       }
 
       setState({ days, hours, minutes, seconds });
@@ -54,6 +55,7 @@ const NewYearCountdown = () => {
         }
       };
     }, 1000);
+    return () => clearInterval(interval);
   }, []);
   return (
     <div className="main">
@@ -62,12 +64,9 @@ const NewYearCountdown = () => {
         <p className="wrapper__timer">
           {Object.keys(state).map((v) => (
             <div>
-              <p className="timer__label">{v}:</p>
+              {/* <p className="timer__label">{v}</p> */}
               <p class="base-timer">
-                <SvgCircle
-                  max={(max as any)[v]}
-                  now={(state as any)[v]}
-                />
+                <SvgCircle max={(max as any)[v]} now={(state as any)[v] + 1} />
                 <span id="base-timer-label" class="base-timer__label">
                   <div>{(state as any)[v]}</div>
                 </span>
@@ -80,20 +79,15 @@ const NewYearCountdown = () => {
   );
 };
 
-const SvgCircle = ({
-  max,
-  now,
-}: {
-  max: number;
-  now: number;
-}) => {
+const SvgCircle = ({ max, now }: { max: number; now: number }) => {
   // Divides time left by the defined time limit.
   function calculateTimeFraction() {
     return now / max;
   }
-  const circleDasharray = `${
-    283 - Number((calculateTimeFraction() * 283).toFixed(0))
-  } 283`;
+  // 283 -
+  const circleDasharray = `${Number(
+    (calculateTimeFraction() * 283).toFixed(0)
+  )} 283`;
 
   return (
     <span>
