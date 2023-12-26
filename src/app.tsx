@@ -52,7 +52,7 @@ const NewYearCountdown = () => {
 
       // if new hour, show fireworks 10s and then hide
       // minutes == 0 &&
-      if (seconds == 0) {
+      if (minutes == 0 && seconds == 0) {
         setIsFireworkShow(true);
       }
       if (isFireworkShow && seconds == 50) {
