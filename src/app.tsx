@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import "./app.css";
+import { Fireworks } from "./firework";
+import { JSX } from "preact/jsx-runtime";
 
 export function App() {
   return (
@@ -30,6 +32,7 @@ const NewYearCountdown = () => {
     minutes: 60,
     seconds: 60,
   };
+  const [isFireworkShow, setIsFireworkShow] = useState(true);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -48,7 +51,17 @@ const NewYearCountdown = () => {
         timeTillDate.current[0] += 1;
       }
 
+      // if new hour, show fireworks 10s and then hide
+      // minutes == 0 &&
+      if (seconds == 0) {
+        setIsFireworkShow(true);
+      }
+      if (isFireworkShow && seconds == 50) {
+        setIsFireworkShow(false);
+      }
+
       setState({ days, hours, minutes, seconds });
+
       return () => {
         if (interval) {
           clearInterval(interval);
@@ -57,11 +70,30 @@ const NewYearCountdown = () => {
     }, 1000);
     return () => clearInterval(interval);
   }, []);
+  console.log({ state, isFireworkShow });
   return (
     <div className="main">
       <p className="wrapper">
-        <p className="title">New Year Countdown</p>
+        <Fireworks num={isFireworkShow ? 10 : 0}></Fireworks>
+        {/* popup for time left if isFireworkShow */}
+        <p className={`timer__left__popup ${isFireworkShow ? "show" : ""}`}>
+          Time left to New Year 2024 are
+          <br />
+          {state.days}d:{state.hours}h:{state.minutes}m:{state.seconds}s
+        </p>
         <p className="wrapper__timer">
+          <a
+            className="unwrap__link"
+            onClick={() => window.open("https://vsus.app")}
+          >
+            Unwrap your year (troll by nbth)
+          </a>
+          <p
+            className="title"
+            style={{ display: isFireworkShow ? "none" : "block" }}
+          >
+            New Year Countdown{" "}
+          </p>
           {Object.keys(state).map((v) => (
             <div>
               {/* <p className="timer__label">{v}</p> */}
