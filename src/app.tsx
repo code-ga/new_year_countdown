@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import "./app.css";
 import { Fireworks } from "./firework";
-import { JSX } from "preact/jsx-runtime";
 
 export function App() {
   return (
