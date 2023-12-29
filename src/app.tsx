@@ -31,7 +31,7 @@ const NewYearCountdown = () => {
     minutes: 60,
     seconds: 60,
   };
-  const [isFireworkShow, setIsFireworkShow] = useState(true);
+  const [isFireworkShow, setIsFireworkShow] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -50,13 +50,8 @@ const NewYearCountdown = () => {
         timeTillDate.current[0] += 1;
       }
 
-      // if new hour, show fireworks 10s and then hide
-      // minutes == 0 &&
-      if (minutes == 0 && seconds == 0) {
+      if (days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
         setIsFireworkShow(true);
-      }
-      if (isFireworkShow && seconds == 50) {
-        setIsFireworkShow(false);
       }
 
       setState({ days, hours, minutes, seconds });
@@ -76,9 +71,7 @@ const NewYearCountdown = () => {
         <Fireworks num={isFireworkShow ? 10 : 0}></Fireworks>
         {/* popup for time left if isFireworkShow */}
         <p className={`timer__left__popup ${isFireworkShow ? "show" : ""}`}>
-          Time left to New Year 2024 are
-          <br />
-          {state.days}d:{state.hours}h:{state.minutes}m:{state.seconds}s
+          Happy New Year
         </p>
         <p className="wrapper__timer">
           <a
