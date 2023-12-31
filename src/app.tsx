@@ -24,7 +24,7 @@ const NewYearCountdown = () => {
     seconds: 0,
   });
   // [year, month, day, hour, minute, second, millisecond]
-  const timeTillDate = useRef([2024, 0, 0, 0, 0, 0, 0]);
+  const timeTillDate = useRef([2024, 0, 1, 0, 0, 0, 0]);
   const max: CountdownDateData = {
     days: 31,
     hours: 24,
@@ -90,7 +90,7 @@ const NewYearCountdown = () => {
             <div>
               {/* <p className="timer__label">{v}</p> */}
               <p class="base-timer">
-                <SvgCircle max={(max as any)[v]} now={(state as any)[v] + 1} />
+                <SvgCircle max={(max as any)[v]} now={(state as any)[v]} />
                 <span id="base-timer-label" class="base-timer__label">
                   <div>{(state as any)[v]}</div>
                 </span>
